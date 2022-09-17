@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css'
 import '../index.css';
 import {
   DesktopOutlined,
@@ -8,9 +8,13 @@ import {
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu } from 'antd';
+import { Breadcrumb, Button, Layout, Menu } from 'antd';
 import logo from '../images/logo.png';
 import Farhikhtegan from './Farhikhtegan';
+import Projects from './Projects';
+import Profile from './Profile';
+import Events from './Events';
+import Forms from './Forms';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -26,8 +30,8 @@ function getItem(label, key, icon, children) {
 const items = [
   getItem('پروفایل', '1', <PieChartOutlined />),
   getItem('فرهیختگان', '2', <DesktopOutlined />),
-  getItem('رویدادها', '3', <UserOutlined />), // [ getItem('Tom', '3'), getItem('Bill', '4'), getItem('Alex', '5')]
-  getItem('پروژه‌ها و موقعیت‌ها', '4', <TeamOutlined />),
+  getItem('رویدادها', '3', <TeamOutlined />), // [ getItem('Tom', '3'), getItem('Bill', '4'), getItem('Alex', '5')]
+  getItem('پروژه‌ها و موقعیت‌ها', '4', <UserOutlined />),
   getItem('پرسشنامه‌ها', '5', <FileOutlined />),
 ];
 
@@ -36,7 +40,25 @@ const logoStyle = {
     marginRight: '15px'
 }
 
+const itemsTitle = [
+  'profile',
+  'farhikhtegan',
+  'events',
+  'projects',
+  'forms'
+]
+
+const itemsTitlePersian = [
+  'پروفایل',
+  'فرهیختگان',
+  'رویدادها',
+  'پروژه‌ها',
+  'پرسشنامه‌ها'
+]
+
 const App = () => {
+  const [state, setState] = useState('profile')
+  const [breadc, setBreadc] = useState('پروفایل')
   const [collapsed, setCollapsed] = useState(true);
   return (
     <Layout
@@ -48,7 +70,7 @@ const App = () => {
       <Sider style={{paddingTop: '18px',}} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="logo" />
         <h1 style={logoStyle} ><img width={50} size="large" src={logo} /></h1>
-        <Menu theme="dark" defaultSelectedKeys={['2']} mode="inline" items={items} />
+        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} onClick={(selectedKey) => {setState(itemsTitle[selectedKey.key-1]); setBreadc(itemsTitlePersian[selectedKey.key-1])}} />
       </Sider>
       <Layout className="site-layout">
         <Header
@@ -68,7 +90,7 @@ const App = () => {
             }}
           >
             <Breadcrumb.Item>منوها</Breadcrumb.Item>
-            <Breadcrumb.Item>فرهیختگان</Breadcrumb.Item>
+            <Breadcrumb.Item>{breadc}</Breadcrumb.Item>
           </Breadcrumb>
           <div
             className="site-layout-background"
@@ -77,7 +99,13 @@ const App = () => {
               minHeight: 360,
             }}
           >
-           <Farhikhtegan />
+          
+            {state === 'profile' && (<Profile />)}
+            {state === 'farhikhtegan' && <Farhikhtegan />}
+            {state === 'events' && <Events />}
+            {state === 'projects' && <Projects />}
+            {state === 'forms' && <Forms />}
+
           </div>
         </Content>
         <Footer
